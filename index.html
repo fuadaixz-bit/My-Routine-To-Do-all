@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#0A1A14">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amar routine</title>
+<style>
+:root{--bg:#0A1A14;--card:#11291F;--ink:#E6F4EC;--mute:#8DB0A0;--line:#1F3D30;--ac:#4ADE80;--btn:#4ADE80;--btnt:#052E16;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 14px 100px}
+input,select,button,textarea{font:inherit;color:inherit}
+h2{font-size:22px;margin:0 0 4px}
+.hint{font-size:13px;color:var(--mute);margin:6px 0 14px}
+.ttl{width:100%;font-size:26px;font-weight:700;background:none;border:0;border-bottom:1px dashed var(--line);padding:4px 0;outline:none}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.btn,.bar button,.mini{padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.bar .main,.btn.main{background:var(--btn);color:var(--btnt);border-color:var(--btn)}
+.mini{padding:5px 10px;font-size:14px;background:var(--bg)}
+.lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute);margin-bottom:14px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.row{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px}
+.cb{width:6px;border-radius:3px;flex:none}
+.bd{flex:1;min-width:0}
+.bd input[type=text]{width:100%;background:none;border:0;border-bottom:1px solid transparent;padding:3px 0;outline:none}
+.bd input[type=text]:focus{border-bottom-color:var(--mute)}
+.tm{font-size:14px;color:var(--mute)}.nm{font-size:17px;font-weight:700}.nt{font-size:14px;color:var(--mute)}
+.ct{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ct select,.ct button{padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:14px;cursor:pointer}
+.ct .del{margin-left:auto;color:#F87171}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;padding:14px 2px;border:0;background:none;font-size:12px;white-space:nowrap;color:var(--mute);cursor:pointer;box-shadow:inset 0 3px 0 transparent}
+.nav button.on{color:var(--ac);font-weight:700;box-shadow:inset 0 3px 0 var(--ac)}
+.cal{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin:10px 0}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700}
+.ch button{border:1px solid var(--line);background:var(--bg);border-radius:8px;width:38px;height:34px;font-size:18px;cursor:pointer}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cg .w{font-size:12px;color:var(--mute);text-align:center}
+.cg .d{aspect-ratio:1/1.1;border:1px solid var(--line);border-radius:8px;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;padding:0;cursor:pointer}
+.d small{font-size:10px;color:var(--mute);min-height:12px}
+.d.today{border-color:var(--ink);border-width:2px}
+.d.sel{outline:2px solid #4ADE80;outline-offset:1px}
+.pr{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px;font-size:17px;cursor:pointer}
+.pr.on{border-color:#4ADE80;background:rgba(74,222,128,.13)}
+.pr input,.td input{width:22px;height:22px;accent-color:#4ADE80}
+.st{font-size:14px;color:var(--mute);line-height:1.7}
+.add{display:flex;gap:8px;margin:12px 0}
+.add input{flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card)}
+.td{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px}
+.td span{flex:1;overflow-wrap:anywhere}.td.dn span{text-decoration:line-through;color:var(--mute)}
+.td button{border:0;background:none;font-size:22px;color:var(--mute);cursor:pointer;padding:0 6px}
+.dh{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:4px}
+.dh b{flex:1;text-align:center;font-size:16px}
+.je{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.je input[type=time]{width:92px;flex:none;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 6px;font-size:14px}
+.je textarea{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 11px;resize:none;overflow:hidden;line-height:1.5}
+.je .jd{border:0;background:none;font-size:22px;color:var(--mute);cursor:pointer}
+.nw{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:12px 0}
+.nw .je textarea{min-height:90px}
+.fp{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto}
+.fpi{max-width:640px;margin:0 auto;padding:16px 14px 60px}
+.fe{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+.fe b{width:56px;flex:none;color:var(--mute);font-size:15px;font-weight:700}
+.fe p{margin:0;flex:1;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
+.pr.sm{padding:9px 12px;font-size:15px;gap:10px;margin-bottom:6px}
+.rt em{display:block;font-style:normal;font-size:12px;color:var(--mute)}
+h3{font-size:16px;margin:0 0 2px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.seg .on{background:var(--btn);color:var(--btnt);border-color:var(--btn)}
+.rgs{display:flex;justify-content:space-around;gap:6px;margin:14px 0}
+.rg{text-align:center;flex:1}.rg b{display:block;font-size:14px}.rg small{display:block;color:var(--mute);font-size:12px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.tile b{display:block;font-size:22px}.tile small{color:var(--mute);font-size:13px}
+.hb{display:flex;align-items:center;gap:8px;font-size:13px;margin:7px 0}
+.hb span{width:112px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr{flex:1;height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.tr i{display:block;height:100%;border-radius:5px}
+.hb em{width:40px;text-align:right;font-style:normal;color:var(--mute)}
+.ax{stroke:var(--line);stroke-width:1}.tx{fill:var(--mute);font-size:10px}
+.rb{stroke:var(--line)}.rv{fill:var(--ink);font-size:17px;font-weight:700}.hz{fill:var(--line)}
+.abt{text-align:center;padding:26px 0 16px}
+.av{width:84px;height:84px;border-radius:50%;background:var(--btn);color:var(--btnt);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;margin:0 auto 14px}
+.abt h2{margin:0}.by{margin:16px 0 2px;color:var(--mute);font-size:14px}
+.nmf{margin:0;font-size:30px;line-height:1.2}.sub{margin:8px 0 0;color:var(--mute);font-size:16px}
+.ft{text-align:center;color:var(--mute);font-size:13px;margin:28px 0 0}
+.lk{border:0;background:none;color:inherit;text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #4ADE80;outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+
+<section id="v-routine">
+<input class="ttl" id="ttl" aria-label="Routine er naam">
+<p class="hint">Je kono lekha ba shomoy click kore bodlao. Shob ei browser e auto save hoy.</p>
+<div class="bar">
+<button class="main" id="add">+ Notun kaj</button>
+<button id="png">Image download</button>
+<button id="rst">Reset</button>
+<button id="abt">About</button>
+</div>
+<div class="lg" id="lg"></div>
+<div id="list"></div>
+<div class="cal" id="bk">
+<h3>Backup</h3>
+<p class="hint" id="bs"></p>
+<label class="pr sm"><input type="checkbox" id="bauto"><span>Roj automatic backup<em>App khulle prothom chap e ekbar hoy</em></span></label>
+<label class="pr sm"><input type="checkbox" id="bdev"><span>Device e file save<em>Downloads folder e amar_backup_tarikh.json</em></span></label>
+<label class="pr sm"><input type="checkbox" id="bdrv"><span>Google Drive (API)<em>Setup lagbe, niche dekho</em></span></label>
+<div class="add" id="bcid" hidden><input id="bci" placeholder="Google Client ID ekhane paste koro" aria-label="Google Client ID" autocomplete="off"></div>
+<div class="bar" style="margin-top:10px">
+<button class="main" id="bnow">Ekhon backup koro</button>
+<button id="bsh">Drive / onno app e share</button>
+<button id="bdl" hidden>Drive theke load</button>
+<button id="bi">File theke load</button>
+<input type="file" id="bf" accept=".json,application/json,text/plain" hidden>
+</div>
+<h3 style="margin-top:14px">Restore point</h3>
+<p class="hint">App roj nijer bhitore ekta copy rakhe (ses 7 din). Vul edit ba delete hole ekhan theke fire jete parbe. Browser data clear korle eta jabe, tai device ba Drive backup o rakho.</p>
+<div id="bsn"></div>
+</div>
+</section>
+
+<section id="v-track" hidden>
+<h2>Namaz</h2>
+<p class="hint" id="nd"></p>
+<div id="np"></div>
+<h2 style="margin-top:24px">Routine checklist</h2>
+<p class="hint" id="rc"></p>
+<div id="rl"></div>
+<h2 style="margin-top:24px">To-do list</h2>
+<p class="hint" id="tc"></p>
+<div class="add"><input id="ti" placeholder="Notun kaj likho..." aria-label="Notun kaj"><button class="btn main" id="ta">Add</button></div>
+<div id="tl"></div>
+<button class="btn" id="tx">Hoye jawa kaj muche felo</button>
+<h2 style="margin-top:28px">Namaz calendar</h2>
+<p class="hint">Je din e chap dibe, upore oi diner namaz edit korte parbe.</p>
+<div class="cal" id="nc"></div>
+<div class="st" id="ns"></div>
+</section>
+
+<section id="v-journal" hidden>
+<h2>Journal</h2>
+<div class="dh"><button class="mini" id="jp" aria-label="Ager din">‹</button><b id="jh"></b><button class="mini" id="jn2" aria-label="Porer din">›</button></div>
+<div class="bar" style="justify-content:center;margin:8px 0"><button class="mini" id="jtog">Calendar dekho</button><button class="mini" id="jto">Aajker din e jao</button><button class="mini" id="jfp">Full page dekho</button></div>
+<div class="cal" id="jc" hidden></div>
+<div class="nw">
+<div class="je"><input type="time" id="jtn" aria-label="Lekha shuru er shomoy"><textarea id="jn" placeholder="Ekhane lekha shuru koro. Shomoy auto lekha hobe."></textarea></div>
+<button class="btn main" id="jsv">Journal e rakho</button>
+</div>
+<div id="jl"></div>
+</section>
+
+<section id="v-stats" hidden>
+<h2>Statistics</h2>
+<p class="hint">Namaz, routine, journal ar to-do er shob hishab ek jaygay.</p>
+<div class="seg" id="sg"><button data-r="7">7 din</button><button data-r="30" class="on">30 din</button><button data-r="90">90 din</button></div>
+<div id="sb"></div>
+</section>
+
+<p class="ft">Created by Muhtasim Fuad &middot; <button class="lk" id="abt2">About</button></p>
+</main>
+
+<div class="fp" id="ab" hidden>
+<div class="fpi">
+<button class="mini" id="abb">← Back</button>
+<div class="abt">
+<div class="av" aria-hidden="true">MF</div>
+<h2>Amar Routine</h2>
+<p class="by">Created by</p>
+<p class="nmf"><b>Muhtasim Fuad</b></p>
+<p class="sub">A Bangladeshi 17 year old guy</p>
+</div>
+<div class="cal"><h3>About this app</h3>
+<p class="st">A personal planner for building a daily routine: routine checklist, namaz tracker, to-do list, journal, statistics and automatic backup. Your data stays on your own device (and on your own Google Drive if you turn that on).</p></div>
+<p class="hint" style="text-align:center">Version 7 &middot; Made in Bangladesh</p>
+</div>
+</div>
+
+<div class="fp" id="fp" hidden>
+<div class="fpi">
+<button class="mini" id="fpb">← Back</button>
+<div class="dh" style="margin-top:14px"><button class="mini" id="fpp" aria-label="Ager din">‹</button><b id="fph"></b><button class="mini" id="fpn" aria-label="Porer din">›</button></div>
+<p class="hint" id="fpc" style="text-align:center"></p>
+<div id="fpl"></div>
+</div>
+</div>
+
+<nav class="nav">
+<button id="n-routine" class="on">Routine</button>
+<button id="n-track">Namaz &amp; To-do</button>
+<button id="n-journal">Journal</button>
+<button id="n-stats">Stats</button>
+</nav>
+
+<script>
+const $=id=>document.getElementById(id);
+const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const pad=n=>String(n).padStart(2,"0");
+const dk=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const TODAY=()=>dk(new Date());
+const nowT=()=>{const d=new Date();return pad(d.getHours())+":"+pad(d.getMinutes())};
+const fromK=k=>{const[a,b,c]=k.split("-").map(Number);return new Date(a,b-1,c)};
+const fmt=k=>fromK(k).toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const monthOf=k=>{const d=fromK(k);return{y:d.getFullYear(),m:d.getMonth(),sel:k}};
+
+const CATS={namaz:["Namaz","#4ADE80"],study:["Study","#A78BFA"],gym:["Gym","#FB923C"],teacher:["Teacher","#FBBF24"],work:["Online kaj","#60A5FA"],rest:["Rest / free","#94A3B8"]};
+const DEF=[
+["4:45","Uth, pani, wudu, Fajr","","namaz"],["5:00 - 6:30","Math / Accounting","Kothin ta age, phone dure","study"],
+["6:30 - 7:15","Ready, halka nasta","","rest"],["7:15 - 8:30","Gym","","gym"],
+["8:30 - 9:15","Gosol, nasta","Dim, doi (protein)","rest"],["9:15 - 9:45","Power nap","20-30 min, alarm dao","rest"],
+["9:45 - 11:30","Free / homework dekha","","study"],["11:30 - 1:30","Teacher","","teacher"],
+["1:30 - 2:15","Lunch + Zuhr","","namaz"],["2:15 - 3:15","YouTube / rest","Timer dao","rest"],
+["3:15 - 4:45","Online kaj","Gym miss hole gym","work"],["Asr er shomoy","Asr, nasta","","namaz"],
+["5:00 - 6:00","Hanta + Maghrib","Teacher er age","namaz"],["6:00 - 8:00","Teacher","","teacher"],
+["8:00 - 8:40","Isha + dinner","","namaz"],["8:40 - 9:40","Instagram e kotha + YouTube","Shorboshesh 1 ghonta","rest"],
+["9:40 - 10:40","Study","Porer diner 3 ta kaj likho","study"],["10:40","Ghum","Phone bichhanay na","rest"]
+];
+const fresh=()=>({title:"Amar daily routine",rows:DEF.map((a,i)=>({id:"d"+i,t:a[0],n:a[1],s:a[2],c:a[3]}))});
+let S=ld("amar-routine-v1",null);
+if(!S||!Array.isArray(S.rows))S=fresh();
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const fixIds=()=>{S.rows.forEach(r=>{if(!r.id)r.id=uid()})};
+fixIds();
+let T=ld("amar-todo-v1",[]),N=ld("amar-namaz-v1",{}),J=ld("amar-journal-v1",{}),R=ld("amar-rlog-v1",{});
+const saveAll=()=>{sv("amar-routine-v1",S);sv("amar-todo-v1",T);sv("amar-namaz-v1",N);sv("amar-journal-v1",J);sv("amar-rlog-v1",R)};
+
+function cal(box,st,info,pick){
+  const{y,m}=st,off=(new Date(y,m,1).getDay()+1)%7,n=new Date(y,m+1,0).getDate(),t=TODAY();
+  let h=`<div class="ch"><button data-mv="-1" aria-label="Ager mash">‹</button><span>${MN[m]} ${y}</span><button data-mv="1" aria-label="Porer mash">›</button></div><div class="cg">`;
+  ["Sat","Sun","Mon","Tue","Wed","Thu","Fri"].forEach(w=>h+=`<div class="w">${w}</div>`);
+  for(let i=0;i<off;i++)h+="<span></span>";
+  for(let d=1;d<=n;d++){const k=y+"-"+pad(m+1)+"-"+pad(d),i=info(k);
+    h+=`<button class="d${k===t?" today":""}${k===st.sel?" sel":""}" data-d="${k}"${i.bg?` style="background:${i.bg}"`:""}>${d}<small>${i.l||""}</small></button>`}
+  box.innerHTML=h+"</div>";
+  box.onclick=e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.mv){st.m+=+b.dataset.mv;if(st.m<0){st.m=11;st.y--}if(st.m>11){st.m=0;st.y++}cal(box,st,info,pick)}
+    else if(b.dataset.d)pick(b.dataset.d)};
+}
+
+/* nav */
+const VIEWS=["routine","track","journal","stats"];
+function show(v){VIEWS.forEach(n=>{$("v-"+n).hidden=n!==v;$("n-"+n).classList.toggle("on",n===v)});
+  if(v==="track"){NV=monthOf(TODAY());rNamaz();rTodo()}if(v==="journal")openJ();if(v==="stats")rStats();window.scrollTo(0,0)}
+VIEWS.forEach(n=>$("n-"+n).onclick=()=>show(n));
+
+/* routine */
+$("lg").innerHTML=Object.values(CATS).map(c=>`<span><i style="background:${c[1]}"></i>${c[0]}</span>`).join("");
+$("ttl").oninput=e=>{S.title=e.target.value;sv("amar-routine-v1",S)};
+function rRoutine(){
+  $("ttl").value=S.title;
+  $("list").innerHTML=S.rows.map((r,i)=>`
+  <div class="row"><div class="cb" style="background:${CATS[r.c][1]}"></div><div class="bd">
+    <input type="text" class="tm" data-i="${i}" data-k="t" value="${esc(r.t)}" placeholder="Shomoy" aria-label="Shomoy">
+    <input type="text" class="nm" data-i="${i}" data-k="n" value="${esc(r.n)}" placeholder="Kaj er naam" aria-label="Kaj">
+    <input type="text" class="nt" data-i="${i}" data-k="s" value="${esc(r.s)}" placeholder="Chhoto note (optional)" aria-label="Note">
+    <div class="ct"><select data-i="${i}" aria-label="Dhoron">${Object.entries(CATS).map(([k,c])=>`<option value="${k}"${k===r.c?" selected":""}>${c[0]}</option>`).join("")}</select>
+    <button data-up="${i}" aria-label="Upore nao">↑</button><button data-dn="${i}" aria-label="Niche nao">↓</button>
+    <button class="del" data-del="${i}">Muche felo</button></div></div></div>`).join("");
+}
+const L=$("list");
+L.addEventListener("input",e=>{const t=e.target;if(t.dataset.k){S.rows[t.dataset.i][t.dataset.k]=t.value;sv("amar-routine-v1",S)}});
+L.addEventListener("change",e=>{const t=e.target;if(t.tagName==="SELECT"){S.rows[t.dataset.i].c=t.value;sv("amar-routine-v1",S);rRoutine()}});
+L.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const d=b.dataset,R=S.rows;
+  if(d.up!==undefined){const i=+d.up;if(i>0)[R[i-1],R[i]]=[R[i],R[i-1]]}
+  else if(d.dn!==undefined){const i=+d.dn;if(i<R.length-1)[R[i+1],R[i]]=[R[i],R[i+1]]}
+  else if(d.del!==undefined){if(!confirm("Ei kaj ta muche felbe?"))return;R.splice(+d.del,1)}
+  sv("amar-routine-v1",S);rRoutine()});
+$("add").onclick=()=>{S.rows.push({id:uid(),t:"",n:"",s:"",c:"rest"});sv("amar-routine-v1",S);rRoutine();const x=L.querySelectorAll(".tm"),l=x[x.length-1];l.focus();l.scrollIntoView({block:"center"})};
+$("rst").onclick=()=>{if(!confirm("Routine ager moto hoye jabe. Thik ache?"))return;S=fresh();sv("amar-routine-v1",S);rRoutine()};
+
+function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+function fit(x,s,max){if(x.measureText(s).width<=max)return s;while(s.length>1&&x.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…"}
+$("png").onclick=()=>{
+  const R=S.rows,W=1080,M=44,RH=104,G=12,TOP=240,H=TOP+R.length*(RH+G)+40;
+  const c=document.createElement("canvas");c.width=W;c.height=H;
+  const x=c.getContext("2d"),F="system-ui,-apple-system,'Segoe UI',sans-serif";
+  x.fillStyle="#0A1A14";x.fillRect(0,0,W,H);x.textBaseline="middle";x.fillStyle="#E6F4EC";x.font="700 58px "+F;
+  x.fillText(fit(x,S.title,W-2*M),M,80);x.font="28px "+F;
+  Object.values(CATS).forEach((k,i)=>{const px=M+(i%3)*330,py=170+Math.floor(i/3)*48;
+    x.fillStyle=k[1];rr(x,px,py-13,26,26,6);x.fill();x.fillStyle="#C5DDD0";x.fillText(k[0],px+38,py)});
+  R.forEach((r,i)=>{const y=TOP+i*(RH+G);
+    rr(x,M,y,W-2*M,RH,22);x.fillStyle="#11291F";x.fill();x.strokeStyle="#1F3D30";x.lineWidth=2;x.stroke();
+    x.fillStyle=CATS[r.c][1];rr(x,M+14,y+16,10,RH-32,5);x.fill();
+    x.fillStyle="#8DB0A0";x.font="27px "+F;x.fillText(fit(x,r.t,230),M+48,y+RH/2);
+    const tx=M+300,mw=W-M-tx-24;x.fillStyle="#E6F4EC";x.font="700 34px "+F;
+    if(r.s){x.fillText(fit(x,r.n,mw),tx,y+36);x.fillStyle="#8DB0A0";x.font="25px "+F;x.fillText(fit(x,r.s,mw),tx,y+74)}
+    else x.fillText(fit(x,r.n,mw),tx,y+RH/2)});
+  dl(c.toDataURL("image/png"),"amar_routine.png")};
+function dl(href,name){const a=document.createElement("a");a.href=href;a.download=name;document.body.appendChild(a);a.click();a.remove()}
+
+/* backup */
+const CFG=Object.assign({auto:true,dev:true,drv:false,cid:"",last:"",at:"",where:"",err:""},ld("amar-cfg-v1",{}));
+const saveCfg=()=>sv("amar-cfg-v1",CFG);
+const payload=()=>JSON.stringify({v:5,at:new Date().toISOString(),S,T,N,J,R});
+const snapAll=()=>ld("amar-snap-v1",{});
+function snap(body){const m=snapAll();m[TODAY()]=body;const ks=Object.keys(m).sort();while(ks.length>7)delete m[ks.shift()];sv("amar-snap-v1",m)}
+function dlText(txt,name){const u=URL.createObjectURL(new Blob([txt],{type:"application/json"}));dl(u,name);setTimeout(()=>URL.revokeObjectURL(u),4000)}
+function applyBackup(d){
+  if(!d||!d.S||!Array.isArray(d.S.rows))throw new Error("Ei file ta thik backup file na.");
+  if(!confirm("Ekhon er shob data ei backup er data diye replace hobe. Thik ache?"))return false;
+  S=d.S;T=d.T||[];N=d.N||{};J=d.J||{};R=d.R||{};fixIds();saveAll();rRoutine();rBk();return true}
+
+let gTok=null,gExp=0;
+function gLoad(){return new Promise((ok,no)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return ok();
+  const x=document.createElement("script");x.src="https://accounts.google.com/gsi/client";x.onload=ok;x.onerror=()=>no(new Error("Google script load hoy ni. Internet ache?"));document.head.appendChild(x)})}
+async function gToken(){
+  if(!CFG.cid)throw new Error("Client ID dao nai.");
+  if(!/^https?:$/.test(location.protocol))throw new Error("Drive API file:// theke chole na. File ta https site e host korte hobe.");
+  if(gTok&&Date.now()<gExp-60000)return gTok;
+  await gLoad();
+  return new Promise((ok,no)=>{const c=google.accounts.oauth2.initTokenClient({client_id:CFG.cid,scope:"https://www.googleapis.com/auth/drive.appdata",
+    callback:r=>{if(r.error)return no(new Error(r.error));gTok=r.access_token;gExp=Date.now()+(+r.expires_in||3000)*1000;ok(gTok)},
+    error_callback:e=>no(new Error((e&&e.type)||"Google login hoy ni"))});c.requestAccessToken()})}
+async function driveUpload(body,name){
+  const H={Authorization:"Bearer "+await gToken()};
+  let r=await fetch("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id)&q="+encodeURIComponent("name='"+name+"'"),{headers:H});
+  if(!r.ok)throw new Error("Drive list "+r.status);
+  const f=(await r.json()).files||[],id=f[0]&&f[0].id,bd="amarbd";
+  const meta=id?{name}:{name,parents:["appDataFolder"]};
+  const mp="--"+bd+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+bd+"\r\nContent-Type: application/json\r\n\r\n"+body+"\r\n--"+bd+"--";
+  r=await fetch("https://www.googleapis.com/upload/drive/v3/files"+(id?"/"+id:"")+"?uploadType=multipart",{method:id?"PATCH":"POST",headers:Object.assign({"Content-Type":"multipart/related; boundary="+bd},H),body:mp});
+  if(!r.ok)throw new Error("Drive upload "+r.status)}
+async function driveLatest(){
+  const H={Authorization:"Bearer "+await gToken()};
+  let r=await fetch("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&orderBy=name%20desc&pageSize=1&fields=files(id,name)",{headers:H});
+  if(!r.ok)throw new Error("Drive list "+r.status);
+  const f=((await r.json()).files||[])[0];if(!f)throw new Error("Drive e kono backup nai.");
+  r=await fetch("https://www.googleapis.com/drive/v3/files/"+f.id+"?alt=media",{headers:H});
+  if(!r.ok)throw new Error("Drive download "+r.status);return JSON.parse(await r.text())}
+
+async function runBackup(){
+  const body=payload(),ok=[],er=[],name="amar_backup_"+TODAY()+".json";
+  snap(body);
+  if(CFG.dev){try{dlText(body,name);ok.push("device")}catch(e){er.push("Device: "+e.message)}}
+  if(CFG.drv){try{await driveUpload(body,name);ok.push("Google Drive")}catch(e){er.push("Drive: "+e.message)}}
+  if(ok.length||!(CFG.dev||CFG.drv)){CFG.last=TODAY();CFG.at=new Date().toLocaleString("en-GB");CFG.where=ok.join(" ar ")||"shudhu app er bhitore"}
+  CFG.err=er.join("; ");saveCfg();rBk()}
+function rBk(){
+  $("bauto").checked=CFG.auto;$("bdev").checked=CFG.dev;$("bdrv").checked=CFG.drv;
+  $("bcid").hidden=!CFG.drv;$("bdl").hidden=!CFG.drv;$("bci").value=CFG.cid;
+  $("bs").textContent=(CFG.at?"Ses backup: "+CFG.at+" ("+CFG.where+"). ":"Ekhono backup hoy ni. ")+(CFG.err?"Somossa: "+CFG.err:"");
+  const m=snapAll();
+  $("bsn").innerHTML=Object.keys(m).sort().reverse().map(k=>`<div class="hb"><span style="width:auto;flex:1">${fmt(k)}</span><button class="mini" data-sn="${k}">Fire jao</button></div>`).join("")||`<p class="hint">Ekhono kono restore point nai.</p>`}
+function autoCheck(){
+  if(!snapAll()[TODAY()])snap(payload());
+  if(CFG.auto&&CFG.last!==TODAY()&&(CFG.dev||CFG.drv)){
+    $("bs").textContent="Aajker auto backup shuru hobe, tumi screen e ekbar chap dilei.";
+    document.addEventListener("click",()=>{runBackup()},{once:true})}}
+$("bauto").onchange=e=>{CFG.auto=e.target.checked;saveCfg()};
+$("bdev").onchange=e=>{CFG.dev=e.target.checked;saveCfg()};
+$("bdrv").onchange=e=>{CFG.drv=e.target.checked;saveCfg();rBk();
+  if(CFG.drv&&!/^https?:$/.test(location.protocol))alert("Google Drive API shudhu tokhon kaj kore jokhon ei file ta https website e host kora thake. Ekhon file:// theke khulecho, tai Drive backup hobe na. Device backup kaj korbe.")};
+$("bci").oninput=e=>{CFG.cid=e.target.value.trim();saveCfg()};
+$("bnow").onclick=()=>runBackup();
+$("bsh").onclick=async()=>{
+  const body=payload(),name="amar_backup_"+TODAY()+".json";let f=null;
+  for(const t of["application/json","text/plain"]){const c=new File([body],name,{type:t});if(navigator.canShare&&navigator.canShare({files:[c]})){f=c;break}}
+  if(!f){alert("Ei browser e share kaj kore na. File download hocche, tarpor Drive app e giye upload koro.");dlText(body,name);return}
+  try{await navigator.share({files:[f],title:"Amar backup"})}catch(e){if(e.name!=="AbortError")alert("Share hoy ni: "+e.message)}};
+$("bdl").onclick=async()=>{try{const d=await driveLatest();if(applyBackup(d))alert("Drive theke backup load hoyeche.")}catch(e){alert("Drive theke load hoy ni: "+e.message)}};
+$("bi").onclick=()=>$("bf").click();
+$("bf").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{if(applyBackup(JSON.parse(r.result)))alert("Backup load hoyeche.")}catch(x){alert(x.message||"Ei file ta thik backup file na.")}};
+  r.readAsText(f);e.target.value=""};
+$("bsn").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  try{if(applyBackup(JSON.parse(snapAll()[b.dataset.sn])))alert("Restore hoyeche.")}catch(x){alert("Restore hoy ni.")}});
+
+/* to-do */
+function rTodo(){
+  const left=T.filter(t=>!t.d).length;
+  $("tc").textContent=T.length?left+" ta kaj baki, "+(T.length-left)+" ta hoye geche":"Ekhono kono kaj nai. Upore likhe add koro.";
+  $("tl").innerHTML=T.map((t,i)=>`<div class="td${t.d?" dn":""}"><input type="checkbox" data-c="${i}"${t.d?" checked":""} aria-label="Hoye geche"><span>${esc(t.x)}</span><button data-r="${i}" aria-label="Muche felo">×</button></div>`).join("");
+}
+function addT(){const v=$("ti").value.trim();if(!v)return;T.push({x:v,d:0});$("ti").value="";sv("amar-todo-v1",T);rTodo()}
+$("ta").onclick=addT;$("ti").onkeydown=e=>{if(e.key==="Enter")addT()};
+$("tl").addEventListener("change",e=>{const i=e.target.dataset.c;if(i===undefined)return;T[i].d=e.target.checked?1:0;if(T[i].d)T[i].dd=TODAY();else delete T[i].dd;sv("amar-todo-v1",T);rTodo()});
+$("tl").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;T.splice(+b.dataset.r,1);sv("amar-todo-v1",T);rTodo()});
+$("tx").onclick=()=>{T=T.filter(t=>!t.d);sv("amar-todo-v1",T);rTodo()};
+
+/* namaz */
+const PN=["Fajr","Zuhr","Asr","Maghrib","Isha"];
+let NV=monthOf(TODAY());
+const cnt=k=>(N[k]||[]).filter(Boolean).length;
+function rNamaz(){
+  const a=N[NV.sel]||[0,0,0,0,0];
+  $("nd").textContent=fmt(NV.sel)+(NV.sel===TODAY()?" (aaj)":"");
+  $("np").innerHTML=PN.map((p,i)=>`<label class="pr${a[i]?" on":""}"><input type="checkbox" data-p="${i}"${a[i]?" checked":""}><span>${p}</span></label>`).join("");
+  cal($("nc"),NV,k=>{const c=cnt(k);return{l:c?c+"/5":"",bg:c?`rgba(22,163,74,${(.2+c*.13).toFixed(2)})`:""}},k=>{NV.sel=k;rNamaz();$("nd").scrollIntoView({block:"center",behavior:"smooth"})});
+  const pre=NV.y+"-"+pad(NV.m+1)+"-",ks=Object.keys(N).filter(k=>k.startsWith(pre));
+  const per=PN.map((p,i)=>p+" "+ks.filter(k=>N[k][i]).length);
+  const tot=ks.reduce((s,k)=>s+cnt(k),0),full=ks.filter(k=>cnt(k)===5).length;
+  $("ns").innerHTML=`<b>${MN[NV.m]} er hishab:</b> ${tot} waqto namaz porecho, ${full} din shob 5 waqto.<br>${per.join(", ")}`;
+  rRlog();
+}
+function rRlog(){
+  const rows=S.rows.filter(r=>r.n.trim()),done=R[NV.sel]||[];
+  const c=rows.filter(r=>done.includes(r.id)).length;
+  $("rc").textContent=rows.length?fmt(NV.sel)+": "+c+"/"+rows.length+" ta kaj hoyeche":"Age Routine tab e kaj add koro.";
+  $("rl").innerHTML=rows.map(r=>{const on=done.includes(r.id);return `<label class="pr sm${on?" on":""}" style="border-left:5px solid ${CATS[r.c][1]}"><input type="checkbox" data-q="${r.id}"${on?" checked":""}><span class="rt"><em>${esc(r.t)}</em>${esc(r.n)}</span></label>`}).join("");
+}
+$("rl").addEventListener("change",e=>{const id=e.target.dataset.q;if(!id)return;let a=R[NV.sel]||[];
+  a=e.target.checked?[...new Set([...a,id])]:a.filter(x=>x!==id);
+  if(a.length)R[NV.sel]=a;else delete R[NV.sel];sv("amar-rlog-v1",R);rRlog()});
+$("np").addEventListener("change",e=>{const i=e.target.dataset.p;if(i===undefined)return;
+  const a=N[NV.sel]||[0,0,0,0,0];a[i]=e.target.checked?1:0;N[NV.sel]=a;if(!cnt(NV.sel))delete N[NV.sel];sv("amar-namaz-v1",N);rNamaz()});
+
+/* journal */
+let JV=monthOf(TODAY());
+const grow=t=>{t.style.height="auto";t.style.height=Math.max(t.scrollHeight,44)+"px"};
+function openJ(){JV=monthOf(TODAY());$("jc").hidden=true;$("jtog").textContent="Calendar dekho";rJournal()}
+function rJournal(){
+  $("jh").textContent=fmt(JV.sel)+(JV.sel===TODAY()?" (aaj)":"");
+  cal($("jc"),JV,k=>{const n=(J[k]||[]).length;return{l:n?n+"":"",bg:n?"rgba(96,165,250,.24)":""}},k=>{JV.sel=k;rJournal()});
+  const E=J[JV.sel]||[];
+  $("jl").innerHTML=E.length?E.map((e,i)=>`<div class="je"><input type="time" data-t="${i}" value="${e.t}" aria-label="Shomoy"><textarea data-x="${i}" rows="1" aria-label="Journal lekha">${esc(e.x)}</textarea><button class="jd" data-jd="${i}" aria-label="Muche felo">×</button></div>`).join(""):`<p class="hint">Ei din e ekhono kichu lekha nai.</p>`;
+  $("jl").querySelectorAll("textarea").forEach(grow);
+}
+function moveDay(n){const d=fromK(JV.sel);d.setDate(d.getDate()+n);JV=monthOf(dk(d));rJournal();if(!$("fp").hidden)rFull()}
+$("jp").onclick=()=>moveDay(-1);$("jn2").onclick=()=>moveDay(1);
+$("jto").onclick=()=>{JV=monthOf(TODAY());rJournal()};
+$("jtog").onclick=()=>{const c=$("jc");c.hidden=!c.hidden;$("jtog").textContent=c.hidden?"Calendar dekho":"Calendar lukao"};
+$("jn").addEventListener("input",e=>{grow(e.target);if(!$("jtn").value&&e.target.value)$("jtn").value=nowT()});
+$("jsv").onclick=()=>{const x=$("jn").value.trim();if(!x){$("jn").focus();return}
+  const E=J[JV.sel]||(J[JV.sel]=[]);E.push({t:$("jtn").value||nowT(),x});E.sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:0);
+  sv("amar-journal-v1",J);$("jn").value="";$("jtn").value="";$("jn").style.height="";rJournal()};
+$("jl").addEventListener("input",e=>{const t=e.target;if(t.dataset.x===undefined)return;grow(t);J[JV.sel][t.dataset.x].x=t.value;sv("amar-journal-v1",J)});
+$("jl").addEventListener("change",e=>{const t=e.target;if(t.dataset.t===undefined||!t.value)return;J[JV.sel][t.dataset.t].t=t.value;
+  J[JV.sel].sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:0);sv("amar-journal-v1",J);rJournal()});
+$("jl").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(!confirm("Ei lekha ta muche felbe?"))return;
+  J[JV.sel].splice(+b.dataset.jd,1);if(!J[JV.sel].length)delete J[JV.sel];sv("amar-journal-v1",J);rJournal()});
+
+function rFull(){const E=J[JV.sel]||[];
+  $("fph").textContent=fmt(JV.sel)+(JV.sel===TODAY()?" (aaj)":"");
+  $("fpc").textContent=E.length?E.length+" ta entry, shomoy onujayi":"";
+  $("fpl").innerHTML=E.length?E.map(e=>`<div class="fe"><b>${e.t}</b><p>${esc(e.x)}</p></div>`).join(""):`<p class="hint" style="text-align:center">Ei din e kono lekha nai.</p>`}
+$("jfp").onclick=()=>{rFull();$("fp").hidden=false;$("fp").scrollTop=0;document.body.style.overflow="hidden"};
+$("fpb").onclick=()=>{$("fp").hidden=true;document.body.style.overflow="";rJournal()};
+$("fpp").onclick=()=>moveDay(-1);$("fpn").onclick=()=>moveDay(1);
+
+/* statistics */
+let SR=30;
+const sd=k=>{const d=fromK(k);return d.getDate()+" "+MN[d.getMonth()].slice(0,3)};
+const rangeKeys=n=>{const a=[],t=new Date();t.setHours(12);for(let i=n-1;i>=0;i--){const x=new Date(t);x.setDate(t.getDate()-i);a.push(dk(x))}return a};
+const pc=v=>Math.round(v*100);
+const labsK=K=>{const n=K.length;return[0,Math.floor((n-1)/2),n-1].map(i=>[i,sd(K[i])])};
+const anc=(i,n)=>i===0?"start":i===n-1?"end":"middle";
+function ring(p,col,label,sub){const r=34,c=2*Math.PI*r,q=Math.max(0,Math.min(p,1));
+  return `<div class="rg"><svg viewBox="0 0 88 88" width="88" height="88" role="img" aria-label="${label} ${pc(q)}%"><circle cx="44" cy="44" r="${r}" fill="none" class="rb" stroke-width="9"/><circle cx="44" cy="44" r="${r}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${(c*q).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 44 44)"/><text x="44" y="50" text-anchor="middle" class="rv">${pc(q)}%</text></svg><b>${label}</b><small>${sub}</small></div>`}
+function bars(vals,max,col,labs){const W=340,L=24,H=110,n=vals.length,bw=(W-L)/n,g=bw>6?bw*.2:1;
+  let s=`<svg viewBox="0 0 ${W} ${H+20}" width="100%" role="img" aria-label="Bar chart">`;
+  [0,.5,1].forEach(f=>{const y=H-f*H;s+=`<line class="ax" x1="${L}" x2="${W}" y1="${y}" y2="${y}"/><text class="tx" x="${L-4}" y="${y+3}" text-anchor="end">${+(max*f).toFixed(1)}</text>`});
+  vals.forEach((v,i)=>{const h=max?v/max*H:0;s+=`<rect x="${(L+i*bw+g/2).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${Math.max(bw-g,1).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col}"/>`});
+  labs.forEach(([i,t])=>{s+=`<text class="tx" x="${(L+i*bw+bw/2).toFixed(1)}" y="${H+15}" text-anchor="${anc(i,n)}">${t}</text>`});
+  return s+"</svg>"}
+function line(vals,col,labs){const W=340,L=30,H=110,n=vals.length,st=n>1?(W-L-6)/(n-1):0;
+  const P=vals.map((v,i)=>[+(L+i*st).toFixed(1),+(H-v*H).toFixed(1)]);
+  let s=`<svg viewBox="0 0 ${W} ${H+20}" width="100%" role="img" aria-label="Line chart">`;
+  [0,.5,1].forEach(f=>{const y=H-f*H;s+=`<line class="ax" x1="${L}" x2="${W}" y1="${y}" y2="${y}"/><text class="tx" x="${L-4}" y="${y+3}" text-anchor="end">${f*100}%</text>`});
+  const d="M"+P.map(p=>p.join(",")).join("L");
+  s+=`<path d="${d}L${P[n-1][0]},${H}L${P[0][0]},${H}Z" fill="${col}" opacity=".16"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>`;
+  if(n<=31)P.forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="${col}"/>`});
+  labs.forEach(([i,t])=>{s+=`<text class="tx" x="${P[i][0]}" y="${H+15}" text-anchor="${anc(i,n)}">${t}</text>`});
+  return s+"</svg>"}
+function heat(){const WK=12,cs=22,g=3,L=30,W=L+WK*(cs+g),H=7*(cs+g)+2,t=new Date();t.setHours(12);
+  const st=new Date(t);st.setDate(t.getDate()-(t.getDay()+1)%7-7*(WK-1));
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Namaz heatmap">`;
+  ["Sat","","Mon","","Wed","","Fri"].forEach((l,r)=>{if(l)s+=`<text class="tx" x="0" y="${r*(cs+g)+cs/2+3}">${l}</text>`});
+  for(let c=0;c<WK;c++)for(let r=0;r<7;r++){const d=new Date(st);d.setDate(st.getDate()+c*7+r);if(d>t)continue;
+    const k=dk(d),n=cnt(k),x=L+c*(cs+g),y=r*(cs+g);
+    s+=n?`<rect x="${x}" y="${y}" width="${cs}" height="${cs}" rx="4" fill="rgba(74,222,128,${(.15+n*.17).toFixed(2)})"><title>${sd(k)}: ${n}/5</title></rect>`:`<rect class="hz" x="${x}" y="${y}" width="${cs}" height="${cs}" rx="4"><title>${sd(k)}: 0/5</title></rect>`}
+  return s+"</svg>"}
+const hbar=(l,p,c)=>`<div class="hb"><span>${esc(l)}</span><div class="tr"><i style="width:${pc(p)}%;background:${c}"></i></div><em>${pc(p)}%</em></div>`;
+function streak(ok){const t=new Date();t.setHours(12);let cur=0,d=new Date(t);if(!ok(dk(d)))d.setDate(d.getDate()-1);
+  while(ok(dk(d))&&cur<3650){cur++;d.setDate(d.getDate()-1)}
+  let best=0,run=0;for(let i=364;i>=0;i--){const x=new Date(t);x.setDate(t.getDate()-i);if(ok(dk(x))){run++;best=Math.max(best,run)}else run=0}
+  return[cur,best]}
+function rStats(){
+  const K=rangeKeys(SR),n=K.length,rows=S.rows.filter(r=>r.n.trim()),ids=new Set(rows.map(r=>r.id)),labs=labsK(K);
+  const nc=K.map(cnt),totN=nc.reduce((a,b)=>a+b,0),perf=nc.filter(v=>v===5).length;
+  const rd=k=>(R[k]||[]).filter(i=>ids.has(i)).length;
+  const rdv=K.map(rd),rdTot=rdv.reduce((a,b)=>a+b,0),rp=rdv.map(v=>rows.length?v/rows.length:0),avgR=rp.reduce((a,b)=>a+b,0)/n;
+  const jc=K.map(k=>(J[k]||[]).length),jDays=jc.filter(Boolean).length,jEnt=jc.reduce((a,b)=>a+b,0);
+  const words=K.reduce((s,k)=>s+(J[k]||[]).reduce((a,e)=>a+(e.x.trim()?e.x.trim().split(/\s+/).length:0),0),0);
+  const hrs=Array(24).fill(0);K.forEach(k=>(J[k]||[]).forEach(e=>{hrs[+e.t.slice(0,2)||0]++}));
+  const done=T.filter(t=>t.d).length,doneR=T.filter(t=>t.dd&&K.includes(t.dd)).length;
+  const ns=streak(k=>cnt(k)===5),js=streak(k=>(J[k]||[]).length>0);
+  const per=PN.map((p,i)=>hbar(p,K.filter(k=>(N[k]||[])[i]).length/n,"#4ADE80")).join("");
+  const tasks=rows.map(r=>({r,c:K.filter(k=>(R[k]||[]).includes(r.id)).length})).sort((a,b)=>b.c-a.c).map(x=>hbar(x.r.n,x.c/n,CATS[x.r.c][1])).join("");
+  $("sb").innerHTML=`
+<div class="rgs">${ring(totN/(n*5),"#4ADE80","Namaz",totN+"/"+n*5)}${ring(avgR,"#A78BFA","Routine",rows.length?"gor "+pc(avgR)+"%":"kaj nai")}${ring(jDays/n,"#60A5FA","Journal",jDays+"/"+n+" din")}</div>
+<div class="tiles">
+<div class="tile"><b>${perf}</b><small>din shob 5 waqto namaz</small></div>
+<div class="tile"><b>${ns[0]} / ${ns[1]}</b><small>namaz streak (ekhon / best)</small></div>
+<div class="tile"><b>${rdTot}</b><small>routine kaj hoyeche</small></div>
+<div class="tile"><b>${js[0]} / ${js[1]}</b><small>journal streak (ekhon / best)</small></div>
+<div class="tile"><b>${jEnt}</b><small>journal entry, ${words} shobdo</small></div>
+<div class="tile"><b>${doneR}</b><small>to-do kaj sesh hoyeche</small></div></div>
+<div class="cal"><h3>Namaz: dine koto waqto</h3><p class="hint">Prottek din e 5 er moddhe koto waqto porecho.</p>${bars(nc,5,"#4ADE80",labs)}<h3 style="margin-top:16px">Kon waqto koto bar</h3>${per}</div>
+<div class="cal"><h3>Namaz heatmap</h3><p class="hint">Ses 12 shoptah. Rong jototuku gorho, toto beshi waqto.</p>${heat()}</div>
+<div class="cal"><h3>Routine completion</h3><p class="hint">Prottek din routine er koto % kaj hoyeche.</p>${rows.length?line(rp,"#A78BFA",labs):"<p class='hint'>Age Routine tab e kaj add koro.</p>"}<h3 style="margin-top:16px">Kon kaj koto bar hoyeche</h3>${tasks||"<p class='hint'>Kono kaj nai.</p>"}<p class="hint">Je din checklist e tick dao ni, oi din 0% dhora hoy.</p></div>
+<div class="cal"><h3>Journal: dine koyta entry</h3>${bars(jc,Math.max(2,...jc),"#60A5FA",labs)}<h3 style="margin-top:16px">Kon shomoy e beshi lekho</h3><p class="hint">Din er kon ghonta e koyta entry.</p>${bars(hrs,Math.max(2,...hrs),"#FBBF24",[[0,"12am"],[6,"6am"],[12,"12pm"],[18,"6pm"],[23,"11pm"]])}</div>
+<div class="cal"><h3>To-do</h3><div class="rgs">${ring(T.length?done/T.length:0,"#FB923C","Sesh",done+"/"+T.length)}<div class="rg" style="text-align:left;align-self:center"><b>${T.length-done} ta baki</b><small>${doneR} ta ei ${n} din e sesh korecho</small></div></div></div>`;
+}
+$("sg").onclick=e=>{const b=e.target.closest("button");if(!b)return;SR=+b.dataset.r;$("sg").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));rStats()};
+
+$("abt").onclick=$("abt2").onclick=()=>{$("ab").hidden=false;$("ab").scrollTop=0;document.body.style.overflow="hidden"};
+$("abb").onclick=()=>{$("ab").hidden=true;document.body.style.overflow=""};
+rRoutine();rBk();autoCheck();
+</script>
+</body>
+</html>
